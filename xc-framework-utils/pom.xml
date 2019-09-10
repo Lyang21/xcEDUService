@@ -12,6 +12,12 @@
 
     <artifactId>xc-framework-utils</artifactId>
 
+    <properties>
+        <swagger.version>2.6.1</swagger.version>
+        <swagger.version>2.9.2</swagger.version>
+    </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -59,6 +65,16 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
     </dependencies>
 
