@@ -6,9 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -43,6 +41,24 @@ public class CmsPageRepositoryTest {
         System.out.println(all.toString());
     }
 
+    //自定义条件查询测试
+    @Test
+    public void testFindAllByExample(){
+        int page = 0;//从0开始
+        int size = 10;//每页记录数
+        Pageable pageable = PageRequest.of(page, size);
+
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setSiteId("5a751fab6abb5044e0d19ea1");
+        //条件匹配器
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching();
+        //定义Example
+        Example<CmsPage> example = Example.of(cmsPage,exampleMatcher);
+        Page<CmsPage> all = cmsPageRepository.findAll(example,pageable);
+        List<CmsPage> content = all.getContent();
+        System.out.println(content);
+    }
+
     //修改
     @Test
     public void testUpdate() {
@@ -52,5 +68,11 @@ public class CmsPageRepositoryTest {
             cmsPage.setPageName("index2.html");
             cmsPageRepository.save(cmsPage);
         }
+    }
+
+    @Test
+    public void testfindByPageName(){
+        CmsPage cmsPage = cmsPageRepository.findByPageName("测试页面");
+        System.out.println(cmsPage);
     }
 }

@@ -1,11 +1,12 @@
 package com.xuecheng.manage_cms.controller;
 
 import com.xuecheng.api.cms.CmsPageControllerApi;
+import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
+import com.xuecheng.framework.domain.cms.response.CmsPageResult;
 import com.xuecheng.framework.model.response.QueryResponseResult;
-import com.xuecheng.framework.utils.PageInfo;
+import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.manage_cms.service.PageService;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,24 +23,47 @@ public class CmsPageController implements CmsPageControllerApi {
     PageService pageService;
 
     @Override
-    @ApiOperation(value = "cmsPage列表")
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    public QueryResponseResult findList(@ModelAttribute PageInfo pageInfo, QueryPageRequest queryPageRequest) {
+    @GetMapping("/list/{page}/{size}")
+    public QueryResponseResult findList(@PathVariable("page") int page, @PathVariable("size") int size, QueryPageRequest queryPageRequest) {
 
-//        //暂时采用测试数据，测试接口是否可以正常运行
-//        QueryResult queryResult = new QueryResult();
-//        queryResult.setTotal(2);
-//        //静态数据列表
-//        List list = new ArrayList();
-//        CmsPage cmsPage = new CmsPage();
-//        cmsPage.setPageName("测试页面");
-//        list.add(cmsPage);
-//        queryResult.setList(list);
-//        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS,queryResult);
-//
-//        return queryResponseResult;
+/*        //暂时用静态数据
+        //定义queryResult
+        QueryResult<CmsPage> queryResult =new QueryResult<>();
+        List<CmsPage> list = new ArrayList<>();
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setPageName("测试页面");
+        list.add(cmsPage);
+        queryResult.setList(list);
+        queryResult.setTotal(1);
 
-
-        return pageService.findList(pageInfo.getPageIndex(),pageInfo.getPageSize(),queryPageRequest);
+        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS,queryResult);
+        return queryResponseResult;*/
+        //调用service
+        return pageService.findList(page, size, queryPageRequest);
     }
+
+    @Override
+    @PostMapping("/add")
+    public CmsPageResult add(@RequestBody CmsPage cmsPage) {
+        return pageService.add(cmsPage);
+    }
+
+    @Override
+    @GetMapping("/get/{id}")
+    public CmsPage getById(@PathVariable("id") String id) {
+        return pageService.getById(id);
+    }
+
+    @Override
+    @PutMapping("/edit/{id}")
+    public CmsPageResult edit(@PathVariable("id")String id, @RequestBody CmsPage cmsPage) {
+        return pageService.update(id, cmsPage);
+    }
+
+    @Override
+    @DeleteMapping("/del/{id}") //使用http的delete方法完成岗位操作
+    public ResponseResult delete(@PathVariable("id") String id) {
+        return pageService.delete(id);
+    }
+
 }
